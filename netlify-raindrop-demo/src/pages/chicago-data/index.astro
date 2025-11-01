@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ChicagoDataDisplay from './_components/ChicagoDataDisplay.tsx';
+---
+
+<Layout title="Chicago Data - Live Dashboard">
+    <div class="py-12">
+        <div class="mb-12">
+            <h1 class="mb-3 text-5xl font-bold tracking-tight">Chicago Data Dashboard</h1>
+            <p class="text-gray-600 text-lg">
+                Live data from the City of Chicago Data Portal, automatically updated every 5 minutes
+            </p>
+        </div>
+        <ChicagoDataDisplay client:load />
+    </div>
+</Layout>

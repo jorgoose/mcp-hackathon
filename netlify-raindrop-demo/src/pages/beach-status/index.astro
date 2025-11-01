@@ -1,0 +1,62 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BeachStatusDisplay from './_components/BeachStatusDisplay';
+---
+
+<Layout title="Chicago Beach Status - Raindrop + Netlify Integration">
+  <div class="py-8 max-w-4xl mx-auto px-4">
+    <div class="mb-8">
+      <a href="/" class="text-primary hover:underline flex items-center gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Home
+      </a>
+    </div>
+
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold mb-4">Chicago Beach Status</h1>
+      <p class="text-gray-600">
+        Real-time status information for Chicago beaches, including water temperature and wave height data.
+        This demo fetches data from the Chicago Data Portal and processes it to provide swimming safety recommendations.
+      </p>
+    </div>
+
+    <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+      <BeachStatusDisplay client:load />
+    </div>
+
+    <div class="mt-8 bg-gray-50 border border-gray-200 rounded-lg p-6">
+      <h2 class="text-xl font-bold mb-4">About This Demo</h2>
+      <p class="mb-4">
+        This demo showcases how to integrate external API data with Netlify serverless functions and Astro.
+        The application fetches beach data from the Chicago Data Portal, processes it on the server side,
+        and displays it with a responsive React component.
+      </p>
+      
+      <h3 class="text-lg font-semibold mt-4 mb-2">Status Indicators</h3>
+      <ul class="space-y-2">
+        <li class="flex items-center gap-2">
+          <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Good</span>
+          <span>Safe swimming conditions</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Caution</span>
+          <span>Moderate waves (0.3-0.6m) or cold water (below 60°F)</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">No Swim</span>
+          <span>High waves (0.6m or higher)</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">Stale</span>
+          <span>Data is more than 3 hours old</span>
+        </li>
+      </ul>
+      
+      <p class="mt-4 text-sm text-gray-500">
+        Data source: <a href="https://data.cityofchicago.org/Parks-Recreation/Beach-Water-and-Weather-Sensor-Data/qmqz-2xku" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Chicago Data Portal</a>
+      </p>
+    </div>
+  </div>
+</Layout>

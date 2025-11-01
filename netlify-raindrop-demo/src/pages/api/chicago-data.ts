@@ -1,30 +1,48 @@
 import type { APIRoute } from 'astro';
-import { getStore } from '@netlify/blobs';
 
 export const prerender = false;
 
 export const GET: APIRoute = async () => {
-    try {
-        const store = getStore('chicago-data');
-        const latestData = await store.get('latest', { type: 'json' });
+    const timestamp = new Date().toISOString();
 
-        if (!latestData) {
+    try {
+        // Call the Chicago Data Portal API directly
+        const apiUrl = "https://data.cityofchicago.org/resource/qmqz-2xku.json";
+
+        console.log(`[${timestamp}] Fetching data from Chicago API`);
+
+        const response = await fetch(apiUrl, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Chicago API call failed: ${response.status} - ${errorText}`);
             return new Response(
                 JSON.stringify({
                     success: false,
-                    message: 'No data available yet. The scheduled function will populate data every 5 minutes.'
+                    error: `API call failed: ${response.status}`,
+                    timestamp
                 }),
                 {
-                    status: 404,
+                    status: response.status,
                     headers: { 'Content-Type': 'application/json' }
                 }
             );
         }
 
+        const data = await response.json();
+
+        console.log(`[${timestamp}] Chicago API call successful`);
+
         return new Response(
             JSON.stringify({
                 success: true,
-                ...latestData
+                timestamp,
+                data
             }),
             {
                 status: 200,
@@ -32,11 +50,12 @@ export const GET: APIRoute = async () => {
             }
         );
     } catch (error) {
-        console.error('Error fetching Chicago data:', error);
+        console.error(`[${timestamp}] Error fetching Chicago data:`, error);
         return new Response(
             JSON.stringify({
                 success: false,
-                error: error instanceof Error ? error.message : 'Unknown error'
+                error: error instanceof Error ? error.message : 'Unknown error',
+                timestamp
             }),
             {
                 status: 500,
